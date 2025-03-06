@@ -7,6 +7,7 @@ export const borrowStore = create((set,get)=>({
     isSendingRequest : false,
     takenBooks : [],
     isReturning: false,
+    isApproving :false,
 
     getRequests : async ()=>{
         try {
@@ -22,7 +23,7 @@ export const borrowStore = create((set,get)=>({
         try {
             const {requests} = get()
             const res = await axiosInstance.post(`/borrow/borrow/${bookId}`)
-            set({requests:[ ...requests , res.data]})
+            requests.length==0?set({requests:[res.data]}):set({requests:[  ...requests ,res.data]})
         } catch (error) {
             console.log("Error in sending request")
             console.error(error)
@@ -33,12 +34,15 @@ export const borrowStore = create((set,get)=>({
         
     },
     approveRequest : async (bookId) =>{
+        set({isApproving:true})
         try {
             const res = await axiosInstance.post(`/borrow/approve/${bookId}`)
             set({requests: res.data})
         } catch (error) {
             console.log("Error in approving request")
             toast.error("Error in approving request")
+        }finally{
+            set({isApproving:false})
         }
     },
     myBooks : async()=>{

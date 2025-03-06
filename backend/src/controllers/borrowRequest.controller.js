@@ -45,6 +45,7 @@ export const approveRequest = async (req,res) =>{
     try {
         const {bookId} = req.params
         const activeRequests = await Request.updateOne({bookId:bookId}, {$set: {isActive:false}})
+        await Book.updateOne({_id:bookId}, {$set: {available:false}})
 
         res.status(200).json(activeRequests)
         
@@ -70,9 +71,10 @@ export const myBooks =async (req,res) =>{
 export const returnBook = async (req,res) =>{
     try {
         const {bookId} = req.params
-        const activeRequests = await Request.updateOne({bookId:bookId}, {$set: {isActive:true}})
+        
+        await Request.findOneAndDelete({bookId:bookId})
         await Book.updateOne({_id:bookId}, {$set: {available:true}})
-
+        const activeRequests = await Request.find({isActive:{$ne:false}})
         res.status(200).json(activeRequests)
         
     } catch (error) {

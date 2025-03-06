@@ -4,11 +4,18 @@ import { CheckSquare } from 'lucide-react'
 import { formatTime } from '../lib/utils'
 
 const BorrowRequests = () => {
-  const {requests,getRequests,approveRequest} = borrowStore()
+  const {requests,getRequests,approveRequest,isApproving} = borrowStore()
 
   useEffect(()=>{
-    getRequests()
-  },[getRequests])
+    getRequests(),requests
+  },[getRequests,requests])
+  if(requests.length == 0){
+    return(
+      <div className='h-full flex items-center justify-center'>
+        <p className='text-primary/40' >No request yet</p>
+      </div>
+    )
+  }
   if (Array.isArray(requests) && requests.length > 0)
   return (
     <div>
@@ -25,10 +32,12 @@ const BorrowRequests = () => {
          
           onClick={()=>approveRequest(book.bookId)}
           className='btn btn-primary btn-sm flex gap-2 h-[25px] hover:bg-primary/25'
+          disabled={isApproving}
           
         >
-            <p>Approve</p>
-            <CheckSquare className='cursor-pointer size-4 text-green-600 font-bold'/>
+           {isApproving? <p>Approving ...</p> : <><p>Approve</p>
+            <CheckSquare className='cursor-pointer size-4 text-green-600 font-bold'/></>}
+            
             
         </button>
         

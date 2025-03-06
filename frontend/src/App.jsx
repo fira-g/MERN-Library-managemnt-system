@@ -17,11 +17,28 @@ import { useAuthUserStore } from './store/useAuthUserStore.js'
 
 
 
+
 function App() {
-  
+
 const {theme} = useThemeStore()
-const {authAdmin} =useAuthAdminStore()
-const {authUser} =useAuthUserStore()
+const {authAdmin,isCheckingAuth,checkAuth} =useAuthAdminStore()
+const {authUser,isCheckingUserAuth,checkUserAuth} =useAuthUserStore()
+
+  useEffect(()=>{
+    checkUserAuth(),checkAuth()
+  },[checkAuth,checkUserAuth])
+  
+
+
+if((isCheckingUserAuth && !authUser) || (isCheckingAuth && !authAdmin)){
+  return(
+    <div data-theme={theme} className='flex items-center justify-center h-screen'>
+    <Loader className='size-10 animate-spin' />
+  </div>
+  )
+  
+  
+}
   return (
     <div data-theme = {theme} >
     

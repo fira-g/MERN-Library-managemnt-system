@@ -9,9 +9,9 @@ const AvailableBooks = () => {
   const {sendRequest,isSendingRequest} = borrowStore()
   
   useEffect(()=>{
-    getAvailable()
+    getAvailable(),available
     
-  },[getAvailable])
+  },[getAvailable,available])
   const handleRequest = (bookId)=>{
     sendRequest(bookId)
     

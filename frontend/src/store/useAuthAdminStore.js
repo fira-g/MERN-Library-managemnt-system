@@ -11,8 +11,9 @@ export const useAuthAdminStore = create((set,get) => ({
     isSigningUp : false,
     isLoggingUp: false,
     isUpdatingProfile: false,
-    isCheckingAuth : true,
+    isCheckingAuth : false,
     checkAuth : async () =>{
+        set({isCheckingAuth:true})
         try {
             const res = await axiosInstance.get("/auth/admin/check")
             set({authAdmin : res.data})

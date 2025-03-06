@@ -8,8 +8,8 @@ const Cart = () => {
   const {takenBooks,myBooks,returnBook,isReturning} = borrowStore()
 
   useEffect(()=>{
-    myBooks()
-  },[myBooks])
+    myBooks(),takenBooks
+  },[myBooks,takenBooks])
 
   const handleReturn = (bookId)=>{
     returnBook(bookId)
